@@ -32,7 +32,7 @@
         /* Colors */
         --bg: #000;
         --fg: #fff;
-        --accent: #a5b4fc;
+        --accent: #fca5b6;
         --fg-body: #a1a1aa;
         --focus-ring: #a5b4fc;
 
@@ -69,7 +69,8 @@
           "Segoe UI",
           Roboto,
           sans-serif;
-        background: var(--bg);
+        background: url("bg.png") center / 100% 100% no-repeat fixed;
+        background-attachment: fixed;
         color: var(--fg);
         min-height: 100dvh;
         line-height: 1.6;
@@ -96,13 +97,12 @@
       .badge {
         display: inline-flex;
         align-items: center;
-        background: color-mix(in srgb, var(--accent) 8%, transparent);
         color: var(--accent);
         font-size: var(--fs-sm);
         letter-spacing: 0.1em;
         padding: 0.5rem 1rem;
         border-radius: var(--radius-pill);
-        border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+        border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
         white-space: nowrap;
       }
 
@@ -131,6 +131,12 @@
           text-align: center;
           left: 0;
           right: 0;
+        }
+      }
+
+      @media (max-aspect-ratio: 16/9) {
+        body {
+          background-size: auto 100%;
         }
       }
 
