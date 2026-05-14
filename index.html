@@ -5,28 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Design System • SEDK.dev</title>
 
-    <!-- Description + Rich link previews -->
+    <!-- SEO + Social -->
     <meta
       name="description"
-      content="Documentation for the design system used by SEDK site-pages." />
+      content="Documentation for the SEDK Design System." />
 
     <!-- Open Graph -->
     <meta property="og:title" content="Design System - SEDK.dev" />
     <meta
       property="og:description"
-      content="Documentation for the design system used by SEDK site-pages." />
+      content="Documentation for the SEDK Design System." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ds.sedk.dev/" />
     <meta property="og:site_name" content="Design System - SEDK.dev" />
     <meta property="og:image" content="https://ds.sedk.dev/og.webp" />
 
-    <!-- Twitter / X Card -->
+    <!-- X / Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Design System - SEDK.dev" />
     <meta
       name="twitter:description"
-      content="Documentation for the design system used by SEDK site-pages." />
+      content="Documentation for the SEDK Design System." />
     <meta name="twitter:image" content="https://ds.sedk.dev/og.webp" />
+
     <style>
       :root {
         /* Colors */
@@ -36,13 +37,10 @@
         --fg-body: #a1a1aa;
         --focus-ring: #a5b4fc;
 
-        /* Fluid Font-Sizes */
+        /* Fluid type & space */
         --fs-h1: clamp(2.5rem, 11vw, 5rem);
         --fs-md: clamp(0.875rem, 2.2vw, 1rem);
         --fs-sm: clamp(0.75rem, 1.8vw, 0.875rem);
-        --fs-body: var(--fs-md);
-
-        /* Fluid Spacing */
         --space-sm: clamp(0.75rem, 1.8vw, 1rem);
         --space-md: clamp(1rem, 2.5vw, 1.5rem);
         --space-lg: clamp(1.5rem, 4vw, 2.5rem);
@@ -60,6 +58,10 @@
         padding: 0;
       }
 
+      html {
+        height: 100%;
+      }
+
       body {
         font-family:
           "Inter",
@@ -69,7 +71,6 @@
         color: var(--fg);
         background-color: var(--bg);
         min-height: 100dvh;
-        height: 100dvh;
         line-height: 1.6;
         display: grid;
         place-items: center;
@@ -77,12 +78,13 @@
         overflow-x: hidden;
       }
 
+      /* Background layer (scaled + blurred initially) */
       body::before {
         content: "";
         position: fixed;
         inset: 0;
         z-index: -2;
-        background: url("bg.png") center / cover no-repeat;
+        background: url("bg.png") center/100% 100% no-repeat;
         background-color: #000;
         transform: scaleY(0.7);
         transform-origin: bottom;
@@ -93,6 +95,7 @@
         will-change: transform, filter;
       }
 
+      /* Dark gradient overlay that slides up on load */
       body::after {
         content: "";
         position: fixed;
@@ -113,6 +116,7 @@
         will-change: transform;
       }
 
+      /* Loaded state — reveal the full background */
       body.loaded::before {
         transform: scaleY(1);
         filter: brightness(1) blur(0px);
@@ -120,6 +124,21 @@
 
       body.loaded::after {
         transform: translateY(-110%);
+      }
+
+      /* Accessibility: respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        body::before,
+        body::after {
+          transition: none !important;
+        }
+        body::before {
+          transform: scaleY(1);
+          filter: brightness(1) blur(0px);
+        }
+        body::after {
+          transform: translateY(-110%);
+        }
       }
 
       /* Header */
@@ -146,7 +165,7 @@
         color: var(--fg-body);
         text-decoration: underline;
         text-decoration-thickness: 1px;
-        font-size: var(--fs-body);
+        font-size: var(--fs-md);
         white-space: nowrap;
       }
 
@@ -159,7 +178,7 @@
         outline-offset: 4px;
       }
 
-      /* Mobile */
+      /* Mobile adjustments */
       @media (max-width: 650px) {
         header {
           flex-direction: column;
@@ -168,10 +187,15 @@
           left: 0;
           right: 0;
         }
+
+        body::before {
+          background: url("bg.png") center/auto 100% no-repeat;
+        }
       }
 
+      /* Taller / less-wide viewports */
       @media (max-aspect-ratio: 16/9) {
-        body {
+        body::before {
           background-size: auto 100%;
         }
       }
@@ -184,7 +208,6 @@
         flex-direction: column;
         align-items: center;
         padding: var(--space-lg);
-        padding-top: var(--space-lg);
       }
 
       h1 {
@@ -209,7 +232,7 @@
     <header>
       <span class="status">UNDER DEVELOPMENT • SELF-HOSTED</span>
       <nav aria-label="Quick links">
-        <a href="https://sedk.dev">Main site</a>
+        <a href="https://sedk.dev" rel="noopener">Main site</a>
       </nav>
     </header>
 
@@ -222,14 +245,17 @@
     </main>
 
     <script>
-      window.addEventListener("load", () => {
-        document.body.classList.add("loaded");
-      });
-      setTimeout(() => {
-        if (!document.body.classList.contains("loaded")) {
-          document.body.classList.add("loaded");
-        }
-      }, 800);
+      // Add loaded class as soon as possible
+      const addLoaded = () => document.body.classList.add("loaded");
+
+      if (document.readyState === "complete") {
+        addLoaded();
+      } else {
+        window.addEventListener("load", addLoaded, { once: true });
+      }
+
+      // Safety net (in case load event is delayed)
+      setTimeout(addLoaded, 800);
     </script>
   </body>
 </html>
