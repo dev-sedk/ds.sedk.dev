@@ -18,7 +18,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ds.sedk.dev/" />
     <meta property="og:site_name" content="Design System - SEDK.dev" />
-    <meta property="og:image" content="https://ds.sedk.dev/bg.webp" />
+    <meta property="og:image" content="https://ds.sedk.dev/og.webp" />
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -26,7 +26,7 @@
     <meta
       name="twitter:description"
       content="Documentation for the design system used by SEDK site-pages." />
-    <meta name="twitter:image" content="https://ds.sedk.dev/bg.webp" />
+    <meta name="twitter:image" content="https://ds.sedk.dev/og.webp" />
     <style>
       :root {
         /* Colors */
@@ -65,20 +65,61 @@
           "Inter",
           system-ui,
           -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          Roboto,
           sans-serif;
-        background: url("./bg.png") center / 100% 100% no-repeat fixed;
-        background-attachment: fixed;
         color: var(--fg);
+        background-color: var(--bg);
         min-height: 100dvh;
+        height: 100dvh;
         line-height: 1.6;
-
         display: grid;
         place-items: center;
         position: relative;
         overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background: url("bg.png") center / cover no-repeat;
+        background-color: #000;
+        transform: scaleY(0.7);
+        transform-origin: bottom;
+        filter: brightness(0.3) blur(10px);
+        transition:
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          filter 0.45s ease-out;
+        will-change: transform, filter;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        height: 150vh;
+        z-index: -1;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 1) 0%,
+          rgba(0, 0, 0, 0.9) 30%,
+          rgba(0, 0, 0, 0.5) 60%,
+          transparent 100%
+        );
+        transform: translateY(0);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
+      }
+
+      body.loaded::before {
+        transform: scaleY(1);
+        filter: brightness(1) blur(0px);
+      }
+
+      body.loaded::after {
+        transform: translateY(-110%);
       }
 
       /* Header */
@@ -179,5 +220,16 @@
         System.
       </p>
     </main>
+
+    <script>
+      window.addEventListener("load", () => {
+        document.body.classList.add("loaded");
+      });
+      setTimeout(() => {
+        if (!document.body.classList.contains("loaded")) {
+          document.body.classList.add("loaded");
+        }
+      }, 800);
+    </script>
   </body>
 </html>
