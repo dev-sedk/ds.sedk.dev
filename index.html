@@ -82,7 +82,7 @@
         z-index: -1;
         background: url("bg.avif") center/100% 100% no-repeat;
         background-color: #000;
-        filter: brightness(0) blur(20px);
+        filter: brightness(0);
         transform: scale(1.1);
         transition:
           filter 1.2s cubic-bezier(0.22, 1, 0.36, 1),
@@ -91,14 +91,14 @@
       }
 
       body.loaded::before {
-        filter: brightness(1) blur(0px);
+        filter: brightness(1);
         transform: scale(1);
       }
 
       @media (prefers-reduced-motion: reduce) {
         body::before {
           transition: none !important;
-          filter: brightness(1) blur(0px);
+          filter: brightness(1);
           transform: scale(1);
         }
       }
@@ -171,7 +171,7 @@
   </head>
   <body>
     <header>
-      <span class="status">Development • System Docs</span>
+      <span class="status">In development • System Docs</span>
       <nav aria-label="Quick links">
         <a href="https://sedk.dev" rel="noopener">Main site</a>
       </nav>
